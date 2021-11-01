@@ -26,12 +26,12 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.das2.datum.DatumRange;
-import org.das2.datum.DatumRangeUtil;
-import org.das2.datum.DatumUtil;
 import org.das2.datum.Units;
 import org.das2.qstream.filter.ReduceFilter;
-import org.virbo.autoplot.AutoplotDataServer;
+import org.autoplot.AutoplotDataServer;
+import org.das2.datum.Datum;
 import org.das2.qstream.FormatStreamHandler;
+import org.das2.qstream.StreamException;
 import org.das2.qstream.StreamHandler;
 import org.das2.qstream.StreamTool;
 
@@ -68,7 +68,7 @@ public class das2server extends HttpServlet {
                         + "</b>"
                         + "</h1>This is a das2Server. "
                         + "<br>More information about das2 can be found at "
-                        + "<a href=\"http://www-pw.physics.uiowa.edu/das2/\">http://www-pw.physics.uiowa.edu/das2/</a>."
+                        + "<a href=\"https://das2.org/\">https://das2.org/</a>."
                         + "<br><br>Bad server keyword.  "
                         + "Server must be [dataset|dsdf|authenticator|groups|compactDataSet|logo|id|list|discovery]\n" 
                         + "<br><a href='"+me+"?server=dsdf&dataset=demoAP.dsdf'>dsdf</a>"
@@ -78,11 +78,8 @@ public class das2server extends HttpServlet {
             }        
         } else if ( server.equals("list") ) {
             response.setContentType("text/plain;charset=UTF-8");
-            PrintWriter out = response.getWriter();
-            try {
+            try (PrintWriter out = response.getWriter()) {
                 das2serverList( out );
-            } finally {
-                out.close();
             }
             
         } else if ( server.equals("logo" ) ) {
@@ -108,7 +105,11 @@ public class das2server extends HttpServlet {
             String startTime= request.getParameter("start_time");
             String endTime= request.getParameter("end_time");
             String resolution= request.getParameter("resolution");
-            doDataset( response, dataset, startTime, endTime, resolution );
+            try {
+                doDataset( response, dataset, startTime, endTime, resolution );
+            } catch ( ParseException | StreamException ex ) {
+                throw new ServletException(ex);
+            }
             
         }
     }
@@ -272,7 +273,7 @@ public class das2server extends HttpServlet {
         out.close();
     }
 
-    private void doDataset(HttpServletResponse response, String dataset, String startTime, String endTime, String resolution) throws IOException {
+    private void doDataset(HttpServletResponse response, String dataset, String startTime, String endTime, String resolution) throws IOException, ParseException, StreamException {
         Map<String,String> dsdf= getDsdf(dataset);
         
         DatumRange tr;
@@ -287,9 +288,12 @@ public class das2server extends HttpServlet {
             
             StreamHandler sh;
             
+            Datum dresolution;
+            dresolution = Units.seconds.parse(resolution);
+                    
             if ( "QReduce".equals( dsdf.get("reducer") ) ) {
                 ReduceFilter filter= new ReduceFilter();
-                filter.setCadence( Units.seconds.parse(resolution) ); // need new jar...
+                filter.setCadence( dresolution ); // need new jar...
                 FormatStreamHandler fsh= new FormatStreamHandler();
                 fsh.setOutputStream( response.getOutputStream() );
                 filter.setSink( fsh );

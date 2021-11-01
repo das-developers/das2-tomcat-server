@@ -1,0 +1,5 @@
+uri = 'http://autoplot.org/data/versioning/data_$Y_$m_$d_v$v.qds'
+reducer = 'QReduce'
+validRange= '2010-03-01/2010-03-04'                    # valid range, clients should not expect data outside of this range
+exampleRange= '2010-03-01'                             # example range, used in testing.
+qstream= 1                                             # the result will be a qstream

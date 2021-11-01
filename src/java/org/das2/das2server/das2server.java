@@ -29,11 +29,11 @@ import org.das2.datum.DatumRange;
 import org.das2.datum.DatumRangeUtil;
 import org.das2.datum.DatumUtil;
 import org.das2.datum.Units;
-import org.qstream.filter.ReduceFilter;
+import org.das2.qstream.filter.ReduceFilter;
 import org.virbo.autoplot.AutoplotDataServer;
-import org.virbo.qstream.FormatStreamHandler;
-import org.virbo.qstream.StreamHandler;
-import org.virbo.qstream.StreamTool;
+import org.das2.qstream.FormatStreamHandler;
+import org.das2.qstream.StreamHandler;
+import org.das2.qstream.StreamTool;
 
 /**
  *

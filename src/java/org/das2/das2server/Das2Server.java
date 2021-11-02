@@ -253,14 +253,15 @@ public class Das2Server extends HttpServlet {
         Map<String,String> dsdf= getDsdf(dataset);
 
         int i=0;
-        int n= dsdf.size();
         
         for ( Entry<String,String> ent : dsdf.entrySet() ) {
             String key= ent.getKey();
             String value= ent.getValue();
+            if ( key.equals("uri") ) continue;
+            if ( i>0 ) sout.append("\n");
             sout.append( key ).append("=\"").append(value);
             i++;
-            if ( i<n ) sout.append("\"\n"); else sout.append("\" ");
+            sout.append("\"");
         }
         
         sout.append( "/>\n</stream>" );

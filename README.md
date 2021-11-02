@@ -20,6 +20,6 @@ would work fine to replace the functionality of the old Perl-based server.
 * Caching and HAPI server functions of the Python-based server have not been 
 implemented, and there are no plans to do this.
 * This server relies on the Autoplot jumbo jar file to provide some functions.
-* The header found on autoplot.jar prevents this versions use, unless the
+* The header found on autoplot.jar prevents this version's use, unless the
 header is removed.
 

@@ -1,11 +1,7 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package org.das2.das2server;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -16,7 +12,9 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- *
+ * The configuration is loaded from $HOME/das2server by default, and
+ * this can be controlled with the environment variable das2server.home.
+ * 
  * @author jbf
  */
 public class Config {
@@ -38,44 +36,19 @@ public class Config {
             loader = ClassLoader.getSystemClassLoader();
 
           // assuming you want to load application.properties located in WEB-INF/classes/conf/
-          String propFile = System.getProperty("user.home") + "/das2server.properties";
-          File fpropFile= new File(propFile);
-          if ( !fpropFile.exists() ) {
-              prop.setProperty( PROP_HOME,  System.getProperty("user.home") + "/das2server/" );
-              prop.setProperty( PROP_LOGO, "$HOME/identity/logo.png" );
-              prop.setProperty( PROP_ID, "$HOME/identity/id.txt" );
-              prop.setProperty( PROP_BIN, "$HOME/bin/" );
-              prop.setProperty( PROP_DATA_SET_ROOT, "$HOME/dataSetRoot/" );
-              try {
-                  OutputStream out= new FileOutputStream(propFile);
-                  try {
-                      prop.store( out, propFile);
-                  } catch ( IOException ex ) {
-                      logger.log( Level.WARNING, null, ex );
-                  } finally {
-                      out.close();
-                  }
-              } catch ( IOException ex ) {
-                      logger.log( Level.WARNING, null, ex );
-              }
-              fpropFile= new File(propFile);
-                        
-              initizializeHome(loader);
+          String home= System.getProperty("das2server.home");
+          if ( home==null ) home= System.getProperty("user.home") + "/das2server/";
 
+          prop.setProperty( PROP_HOME, home );
+          prop.setProperty( PROP_LOGO, home + "identity/logo.png" );
+          prop.setProperty( PROP_ID, home + "identity/id.txt" );
+          prop.setProperty( PROP_BIN, home + "bin/" );
+          prop.setProperty( PROP_DATA_SET_ROOT, home + "dataSetRoot/" );
+              
+          if ( !new File(home).exists() ) {
+              initizializeHome(loader);
           }
-          try {
-              InputStream in= new FileInputStream(fpropFile);
-              try{
-                  prop.load(in);
-              } catch(Exception e) {
-                  logger.log( Level.WARNING, null, e );
-              } finally {
-                  in.close();
-              }
-          } catch ( IOException ex ) {
-              logger.log( Level.WARNING, null, ex );
-          }
-          
+
           // add properties that are missing.
           if ( !prop.contains( PROP_ID ) ) {
               logger.fine("adding property id");

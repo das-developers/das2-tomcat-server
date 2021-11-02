@@ -37,6 +37,7 @@ public class Config {
 
           // assuming you want to load application.properties located in WEB-INF/classes/conf/
           String home= System.getProperty("das2server.home");
+          
           if ( home==null ) home= System.getProperty("user.home") + "/das2server/";
 
           prop.setProperty( PROP_HOME, home );

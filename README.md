@@ -8,6 +8,5 @@ cd das2-tomcat-server/lib
 # copy the large library file needed for time processing.
 wget -N https://jfaden.net/jenkins/job/autoplot-jar-all/lastSuccessfulBuild/artifact/autoplot/Autoplot/dist/AutoplotAll.jar
 cd ..
-ant dist
+ant -Dj2ee.server.home=/usr/local/apache-tomcat-8.0.27/ -Dlibs.CopyLibs.classpath=lib/org-netbeans-modules-java-j2seproject-copylibstask.jar dist
 ```
-

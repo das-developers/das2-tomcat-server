@@ -63,8 +63,8 @@ public class Das2Server extends HttpServlet {
                         + "<img src=\""+me+"?server=logo\">"
                         + getId() 
                         + "</b>"
-                        + "</h1>This is a das2Server. "
-                        + "<br>More information about das2 can be found at "
+                        + "</h1>This is a Das2Server. "
+                        + "<br>More information about Das2 can be found at "
                         + "<a href=\"https://das2.org/\">https://das2.org/</a>."
                         + "<br><br>Bad server keyword.  "
                         + "Server must be [dataset|dsdf|authenticator|groups|compactDataSet|logo|id|list|discovery]\n" 

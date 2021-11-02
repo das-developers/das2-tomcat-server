@@ -1,7 +1,4 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package org.das2.das2server;
 
 import java.io.BufferedReader;
@@ -36,7 +33,7 @@ import org.das2.qstream.StreamHandler;
 import org.das2.qstream.StreamTool;
 
 /**
- *
+ * The Das2Server code.
  * @author jbf
  */
 public class Das2Server extends HttpServlet {

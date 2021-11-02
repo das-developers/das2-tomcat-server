@@ -15,7 +15,7 @@
     <body>
         <h1>Introduction</h1>
         <p>This web application implements a Das2Server with a Java Web application.  The instance is here:
-            <a href="das2server">das2server</a>.  It is configured by setting configuration in 
+            <a href="das2server">das2server</a>.  It is configured with files in 
             <%= Config.resolveProperty( Config.PROP_HOME ) %> on the server.
         <h1></h1>
     </body>

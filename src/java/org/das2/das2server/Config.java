@@ -120,7 +120,7 @@ public class Config {
                  File f= new File( p );
                  if ( !f.exists() ) throw new IllegalArgumentException("logo not found at "+p);
             } else if ( key.equals( PROP_DATA_SET_ROOT ) ) {
-                p= new File(p).getAbsolutePath().toString();
+                p= new File(p).getAbsolutePath();
                 File f= new File( p );
                 if ( !f.exists() ) throw new IllegalArgumentException("dataSetRoot not found at "+p);
             }

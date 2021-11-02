@@ -16,6 +16,6 @@
         <h1>Introduction</h1>
         <p>This here web application implements a das2server with a Java Web application.  The instance is here:
             <a href="das2server">das2server</a>.  It is configured by setting directories in 
-            <%= Config.resolveProperty( Config.PROP_HOME ) %>.
+            <%= Config.resolveProperty( Config.PROP_HOME ) %> on the server.
     </body>
 </html>

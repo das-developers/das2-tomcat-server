@@ -9,13 +9,16 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.io.PrintStream;
 import java.io.PrintWriter;
 import java.nio.channels.ReadableByteChannel;
 import java.text.ParseException;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Properties;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.ServletException;
@@ -31,6 +34,8 @@ import org.das2.qstream.FormatStreamHandler;
 import org.das2.qstream.StreamException;
 import org.das2.qstream.StreamHandler;
 import org.das2.qstream.StreamTool;
+import org.das2.util.monitor.NullProgressMonitor;
+import org.das2.util.monitor.ProgressMonitor;
 
 /**
  * The Das2Server code.
@@ -303,26 +308,34 @@ public class Das2Server extends HttpServlet {
             }
             
             try {
-                String[] args= new String[] { "--uri", uri, "--timeRange", tr.toString(), "--ascii", "--outfile", "/tmp/das2.server.qds", "--noexit" };
+                String[] args= new String[] { "--uri", uri, "--timeRange", tr.toString(), "--ascii", "--outfile", "-", "--noexit" };
                 for ( int i=0; i<args.length; i++ ) {
                     System.err.print( " " +args[i] );
                 }
+                String format= "qds";
+                boolean ascii= true;
+                Set outEmpty= new HashSet<>(); // nasty kludge to prevent logger from writing first.  This is a bug: qstreams at least should support this.
+                ProgressMonitor mon= new NullProgressMonitor();
+                boolean stream =true;
+                if ( format.equals("d2s") && stream ) {
+                    //mon= new AutoplotDataServer.D2SMonitor(response.getOutputStream(),outEmpty);
+                    mon= new NullProgressMonitor();
+                    response.setContentType("text/x-das2stream;charset=UTF-8");
+                } else if ( format.equals("qds") && stream ) {
+                    //mon= new AutoplotDataServer.QStreamMonitor(response.getOutputStream(),outEmpty);
+                    mon= new NullProgressMonitor();
+                    response.setContentType("text/x-qstream;charset=UTF-8");
+                } else {
+                    logger.fine("no progress available because output is not d2s stream");
+                }
+                AutoplotDataServer.doService( tr.toString(), uri, "86400s", true, format, 
+                        new PrintStream( response.getOutputStream() ), ascii, outEmpty, mon );
                 
-                AutoplotDataServer.main( args );
             } catch (Exception ex) {
                 throw new IllegalArgumentException(ex);
             }
-            InputStream in= new FileInputStream("/tmp/das2.server.qds" ); //TODO: don't do things this way, this is just to get to stopping point.
             
-            StreamTool stin= new StreamTool();
-
-            ReadableByteChannel rin= java.nio.channels.Channels.newChannel( in );
-
-            response.setContentType("text/x-qstream;charset=UTF-8");
-            
-            stin.readStream( rin, sh );
-            
-        }
+        } 
         
     }
 }

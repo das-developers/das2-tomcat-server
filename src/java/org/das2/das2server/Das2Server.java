@@ -11,7 +11,6 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.PrintStream;
 import java.io.PrintWriter;
-import java.nio.channels.ReadableByteChannel;
 import java.text.ParseException;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
@@ -33,12 +32,11 @@ import org.das2.datum.Datum;
 import org.das2.qstream.FormatStreamHandler;
 import org.das2.qstream.StreamException;
 import org.das2.qstream.StreamHandler;
-import org.das2.qstream.StreamTool;
 import org.das2.util.monitor.NullProgressMonitor;
 import org.das2.util.monitor.ProgressMonitor;
 
 /**
- * The Das2Server code.
+ * The Das2Server core.
  * @author jbf
  */
 public class Das2Server extends HttpServlet {
@@ -65,7 +63,7 @@ public class Das2Server extends HttpServlet {
                 String me= request.getRequestURL().toString();
                         
                 out.println("<html><body><h1><b>" 
-                        + "<img src=\""+me+"?server=logo\">"
+                        + "<img src=\""+me+"?server=logo\">&nbsp;"
                         + getId() 
                         + "</b>"
                         + "</h1>This is a Das2Server. "
@@ -333,7 +331,7 @@ public class Das2Server extends HttpServlet {
                 
             } catch (Exception ex) {
                 throw new IllegalArgumentException(ex);
-            }
+             }
             
         } 
         
